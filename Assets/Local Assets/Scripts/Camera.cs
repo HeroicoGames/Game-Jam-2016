@@ -15,7 +15,7 @@ public class Camera : MonoBehaviour {
 		minXCamera = -35.0f;
 		minYCamera = 0.0f;
 		maxXCamera = 35.1f;
-		maxYCamera = 39.6f;
+		maxYCamera = 50.0f;
 	}
 	
 	// Update is called once per frame
