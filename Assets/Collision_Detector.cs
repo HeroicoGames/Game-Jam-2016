@@ -19,9 +19,9 @@ public class Collision_Detector : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D col)
     {
 
-      //  if (col.gameObject.tag == "Key") {
-        //    col.gameObject.transform.Rotate(0f, 0f, 90f);
-      //  }
+        if (col.gameObject.tag == "Key") {
+            col.gameObject.transform.Rotate(0f, 0f, 90f);
+        }
     }
 
     bool Complete(GameObject[] gears)

@@ -33,7 +33,7 @@ public class Enemy : MonoBehaviour
     {
         rgb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Nigga").transform;
-        instance = player.GetComponent<Player>();
+       // instance = player.GetComponent<Player>();
     }
 
     void Start()
