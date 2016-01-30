@@ -18,6 +18,10 @@ public class Enemy : MonoBehaviour
     public Vector3 min;
     public Vector3 max;
     Rigidbody2D rgb;
+    bool followed_player = false;
+
+    float xx;
+    float yy;
 
     /*public Enemy(Vector3 min, Vector3 max)
     {
@@ -34,6 +38,8 @@ public class Enemy : MonoBehaviour
 
     void Start()
     {
+        xx = transform.position.x;
+        yy = transform.position.y;
 
         // Set the direction.
         if(min.y == max.y)
@@ -78,15 +84,33 @@ public class Enemy : MonoBehaviour
             }
         }
         else
-        {   
+        {
             // Patrullar por el escenario, evitando obstaculos.
-            Patrullar(direction, max, min);
+            if (!followed_player)
+            {
+                Patrullar(direction, max, min);
+            }
+            
+            // If the enemy followed the player and is not in his position.
+            else if(followed_player && (transform.position.x != xx && transform.position.y != yy))
+            {
+                Debug.Log("I want to return to my position");
+                // Make the enemy move to its inicial position.
+                Vector3.MoveTowards(transform.position, new Vector2(xx, yy), 10f);
+
+                // If he is in his inicial position, start Patrolling.
+                if(transform.position.x == xx && transform.position.y == yy)
+                {
+                    followed_player = false;
+                }
+            }
         }
 
     }
 
     void Follow_Player()
     {
+        followed_player = true;
         if (target != null)
         {
             Vector3 dir = target.position - transform.position;
@@ -114,6 +138,7 @@ public class Enemy : MonoBehaviour
     // Patrullar por el mundo evitando obstaculos.
     void Patrullar(string direction, Vector3 max, Vector3 min)
     {
+        moveSpeed = 8;
         float step = moveSpeed * Time.deltaTime;
 
         if (direction == "H"){
