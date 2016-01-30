@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
     public class Player : MonoBehaviour
@@ -87,5 +88,19 @@ using System.Collections;
             anim.SetBool("up", false);
         }
     }
+
+	public void PlayerDeath()
+	{
+		Destroy (gameObject, 2.0f);
+	}
+
+	void OnTriggerEnter2D(Collider2D col)
+	{
+		if(col.gameObject.CompareTag("Trap"))
+		{
+			PlayerDeath ();
+			SceneManager.LoadScene ("GameOver");
+		}
+	}
    }
 

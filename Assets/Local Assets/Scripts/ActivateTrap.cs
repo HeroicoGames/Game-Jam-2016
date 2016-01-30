@@ -17,10 +17,8 @@ public class ActivateTrap : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D col)
 	{
-		Debug.Log ("Entro trigger");
 		if(col.gameObject.CompareTag("Player"))
 		{
-			Debug.Log ("Entro if");
 			trapSprite.enabled = true;
 		}
 	}
