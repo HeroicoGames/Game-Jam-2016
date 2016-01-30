@@ -5,16 +5,19 @@ public class Enemy : MonoBehaviour
 {
     public GameObject player;
     public GameObject particle;
+    private Player instance;
+
     public float maxSpeed; // 10
     public float acc; // 2
     public Transform target;
     public int moveSpeed;
     public int rotationSpeed;
-    NavMeshAgent nav;
+    float distance = 0f;
 
+    string direction = "";
     public Vector3 min;
     public Vector3 max;
-    string direction = "";
+    Rigidbody2D rgb;
 
     /*public Enemy(Vector3 min, Vector3 max)
     {
@@ -22,11 +25,15 @@ public class Enemy : MonoBehaviour
         this.max = max;
     }*/
 
+    void Awake()
+    {
+        rgb = GetComponent<Rigidbody2D>();
+        target = GameObject.Find("Player").transform;
+        instance = player.GetComponent<Player>();
+    }
 
     void Start()
     {
-        nav = GetComponent<NavMeshAgent>();
-        target = GameObject.Find("Player").transform;
 
         // Set the direction.
         if(min.y == max.y)
@@ -36,16 +43,32 @@ public class Enemy : MonoBehaviour
         else
         {
             direction = "V";
+            Debug.Log(direction);
         }
-        
+
+        Debug.Log(direction);
     }
 
     void Update()
     {
+
+        //Debug.Log("Enemy_x: " + transform.position.x + " Min_x: " + min.x); 
+
+        // If the player is running
+        if (instance.is_running)
+        {
+            distance = 30f;
+        }
+        else
+        {
+            distance = 20f;
+        }
+
         // If the player is near enough.
-        if(Vector3.Distance(transform.position, player.transform.position) < 20)
+        if(Vector3.Distance(transform.position, player.transform.position) < distance)
         {
             // Follow the Player.
+            moveSpeed = 1;
             Follow_Player();
 
             // The enemy has reached the player.
@@ -57,7 +80,7 @@ public class Enemy : MonoBehaviour
         else
         {   
             // Patrullar por el escenario, evitando obstaculos.
-            Patrullar(direction, min, max);
+            Patrullar(direction, max, min);
         }
 
     }
@@ -92,34 +115,71 @@ public class Enemy : MonoBehaviour
     void Patrullar(string direction, Vector3 max, Vector3 min)
     {
         float step = moveSpeed * Time.deltaTime;
-        //Vector3.MoveTowards(transform.position, new Vector3(100f, 100f, 0f), 1f);
-       
-        if (direction == "H"){
-            if (transform.position.x > max.x)
-            {
-                //transform.position -= new Vector3(1f, 0f, 0f) * moveSpeed;
 
-                Vector3.MoveTowards(transform.position, min, step);
-            }
-            else if(transform.position.x < min.x)
+        if (direction == "H"){
+            // Change the direction to left.
+            if (transform.position.x >= max.x)
             {
-                //transform.position += new Vector3(1f, 0f, 0f) * moveSpeed;
-               Vector3.MoveTowards(transform.position, max, step);
+                rgb.AddForce(new Vector2(-1f, 0f) * moveSpeed, ForceMode2D.Force);
             }
-        }else if(direction == "V"){
-            if (transform.position.y > max.y)
-            {
-                //transform.position -= new Vector3(0f, 1f, 0f) * moveSpeed;
-                Vector3.MoveTowards(transform.position, min, step);
+            // Change the direction to right.
+            else if (transform.position.x <= min.x)
+            { 
+                rgb.AddForce(new Vector2(1f, 0f) * moveSpeed, ForceMode2D.Force);
             }
-            else if (transform.position.y < min.y)
+            // The player is in the middle.
+            else
             {
-                //transform.position += new Vector3(0f, 1f, 0f) * moveSpeed;
-                Vector3.MoveTowards(transform.position, max, step);
+                float dis_min = Vector3.Distance(transform.position, min);
+                float dis_max = Vector3.Distance(transform.position, max);
+
+                // Move right.
+                if(dis_min < dis_max)
+                {
+                    rgb.AddForce(new Vector2(1f, 0f) * moveSpeed, ForceMode2D.Force);
+                }
+                // Move left.
+                else
+                {
+                    rgb.AddForce(new Vector2(-1f, 0f) * moveSpeed, ForceMode2D.Force);
+                }
+            }
+        }
+        else if(direction == "V"){
+            Debug.Log("Vertical");
+
+            // Change the direction to down.
+            if (transform.position.y >= max.y)
+            {
+                Debug.Log("Move Up");
+                rgb.AddForce(new Vector2(0f, -1f) * moveSpeed, ForceMode2D.Force);
+            }
+            // Change the direction to up.
+            else if (transform.position.y <= min.y)
+            {
+                Debug.Log("Move down");
+                rgb.AddForce(new Vector2(0f, 1f) * moveSpeed, ForceMode2D.Force);
+            }
+            else
+            {
+                float dis_min = Vector3.Distance(transform.position, min);
+                float dis_max = Vector3.Distance(transform.position, max);
+
+                // Move up.
+                if (dis_min < dis_max)
+                {
+                    rgb.AddForce(new Vector2(0f, 1f) * moveSpeed, ForceMode2D.Force);
+                }
+                // Move down.
+                else
+                {
+                    rgb.AddForce(new Vector2(0f, -1f) * moveSpeed, ForceMode2D.Force);
+                }
             }
         }
 
     }
+
 
     void Death()
     {

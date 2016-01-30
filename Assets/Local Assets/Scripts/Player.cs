@@ -5,8 +5,10 @@ using System.Collections;
     {
 
         public float Speed = 0f;
+        public float runSpeed = 0f;
         private float movex = 0f;
         private float movey = 0f;
+        public bool is_running = false;
         Rigidbody2D rgb;
         Animator anim;
 
@@ -20,9 +22,20 @@ using System.Collections;
     // Update is called once per frame
     void FixedUpdate()
     {
+
         movex = Input.GetAxis("Horizontal");
         movey = Input.GetAxis("Vertical");
-        rgb.velocity = new Vector2(movex * Speed, movey * Speed);
+
+        if (Input.GetKey(KeyCode.Space))
+        {
+            rgb.velocity = new Vector2(movex * runSpeed, movey * runSpeed);
+            is_running = true;
+        }
+        else
+        {
+            rgb.velocity = new Vector2(movex * Speed, movey * Speed);
+            is_running = false;
+        }
 
 
         // The player is not moving.
