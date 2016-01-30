@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         rgb = GetComponent<Rigidbody2D>();
-        target = GameObject.Find("Player").transform;
+		target = player.transform;//GameObject.Find("Player").transform;
         instance = player.GetComponent<Player>();
     }
 
