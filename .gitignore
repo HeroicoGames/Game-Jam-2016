@@ -20,7 +20,7 @@ obj/
 *.booproj
 
 # Quizas no versionar los .meta?
-#*.meta
+*.meta
 
 # ============ #
 # OS generated #

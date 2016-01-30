@@ -12,10 +12,12 @@ public class Camera : MonoBehaviour {
 	private float positionY;
 	// Use this for initialization
 	void Start () {
-		minXCamera = -35.0f;
-		minYCamera = 0.0f;
-		maxXCamera = 35.1f;
-		maxYCamera = 50.0f;
+		minXCamera = -36.6f;
+		minYCamera = -21.8f;
+		maxXCamera = 33.6f;
+		maxYCamera = 27f;
+
+		transform.position = Player.transform.position;
 	}
 	
 	// Update is called once per frame
