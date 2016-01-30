@@ -43,7 +43,7 @@ public class Enemy : MonoBehaviour
     void Update()
     {
         // If the player is near enough.
-        if(Vector3.Distance(transform.position, player.transform.position) < 5)
+        if(Vector3.Distance(transform.position, player.transform.position) < 20)
         {
             // Follow the Player.
             Follow_Player();
