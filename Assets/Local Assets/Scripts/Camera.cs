@@ -17,7 +17,7 @@ public class Camera : MonoBehaviour {
 		maxXCamera = 33.6f;
 		maxYCamera = 27f;
 
-		transform.position = Player.transform.position;
+		transform.position = new Vector3(Player.transform.position.x, minYCamera,-10);
 	}
 	
 	// Update is called once per frame
