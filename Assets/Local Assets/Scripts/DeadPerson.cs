@@ -4,6 +4,7 @@ using System.Collections;
 public class DeadPerson : MonoBehaviour {
 
 	public GameObject player;
+	public GameObject knifePrefab;
 	public float speed = 1;
 	public Sprite deadSprite;
 
@@ -74,6 +75,9 @@ public class DeadPerson : MonoBehaviour {
 	}
 
 	void Knife() {
+
+		Instantiate (knifePrefab, Vector3.zero, Quaternion.identity);
+
 		completedThirdActivity = true;
 	}
 }
