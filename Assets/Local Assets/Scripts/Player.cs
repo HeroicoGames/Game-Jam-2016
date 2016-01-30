@@ -7,7 +7,6 @@ using System.Collections;
         public float Speed = 0f;
         private float movex = 0f;
         private float movey = 0f;
-    GameObject particle;
         Rigidbody2D rgb;
         Animator anim;
 

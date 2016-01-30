@@ -12,15 +12,15 @@ public class Enemy : MonoBehaviour
     public int rotationSpeed;
     NavMeshAgent nav;
 
-    Vector3 min;
-    Vector3 max;
+    public Vector3 min;
+    public Vector3 max;
     string direction = "";
 
-    public Enemy(Vector3 min, Vector3 max)
+    /*public Enemy(Vector3 min, Vector3 max)
     {
         this.min = min;
         this.max = max;
-    }
+    }*/
 
 
     void Start()
@@ -51,11 +51,7 @@ public class Enemy : MonoBehaviour
             // The enemy has reached the player.
             if(Vector3.Distance(transform.position, player.transform.position) < 1)
             {
-                // Create blood particles.
-                Instantiate(particle, new Vector3(transform.position.x, transform.position.y, -7f), Quaternion.identity);
-
-                // Game Over.
-
+                Death();
             }
         }
         else
@@ -95,28 +91,45 @@ public class Enemy : MonoBehaviour
     // Patrullar por el mundo evitando obstaculos.
     void Patrullar(string direction, Vector3 max, Vector3 min)
     {
-
         float step = moveSpeed * Time.deltaTime;
+        //Vector3.MoveTowards(transform.position, new Vector3(100f, 100f, 0f), 1f);
+       
         if (direction == "H"){
             if (transform.position.x > max.x)
-            {                 
+            {
+                //transform.position -= new Vector3(1f, 0f, 0f) * moveSpeed;
+
                 Vector3.MoveTowards(transform.position, min, step);
             }
             else if(transform.position.x < min.x)
             {
-                Vector3.MoveTowards(transform.position, max, step);
+                //transform.position += new Vector3(1f, 0f, 0f) * moveSpeed;
+               Vector3.MoveTowards(transform.position, max, step);
             }
         }else if(direction == "V"){
             if (transform.position.y > max.y)
             {
+                //transform.position -= new Vector3(0f, 1f, 0f) * moveSpeed;
                 Vector3.MoveTowards(transform.position, min, step);
             }
             else if (transform.position.y < min.y)
             {
+                //transform.position += new Vector3(0f, 1f, 0f) * moveSpeed;
                 Vector3.MoveTowards(transform.position, max, step);
             }
         }
 
+    }
+
+    void Death()
+    {
+        // Crear particulas.
+        if (GameObject.Find("Particle") == null)
+        {
+            Instantiate(particle, new Vector3(transform.position.x - 5, transform.position.y - 5, -7f), Quaternion.identity);
+        }
+
+        // Cambiar la escena.
 
     }
 }
