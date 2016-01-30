@@ -5,16 +5,23 @@ public class Enemy : MonoBehaviour
 {
     public GameObject player;
     public GameObject particle;
+    private Player instance;
+
     public float maxSpeed; // 10
     public float acc; // 2
     public Transform target;
     public int moveSpeed;
     public int rotationSpeed;
-    NavMeshAgent nav;
+    float distance = 0f;
 
+    string direction = "";
     public Vector3 min;
     public Vector3 max;
-    string direction = "";
+    Rigidbody2D rgb;
+    bool followed_player = false;
+
+    float xx;
+    float yy;
 
     /*public Enemy(Vector3 min, Vector3 max)
     {
@@ -22,11 +29,17 @@ public class Enemy : MonoBehaviour
         this.max = max;
     }*/
 
+    void Awake()
+    {
+        rgb = GetComponent<Rigidbody2D>();
+        target = GameObject.Find("Player").transform;
+        instance = player.GetComponent<Player>();
+    }
 
     void Start()
     {
-        nav = GetComponent<NavMeshAgent>();
-        target = GameObject.Find("Player").transform;
+        xx = transform.position.x;
+        yy = transform.position.y;
 
         // Set the direction.
         if(min.y == max.y)
@@ -36,16 +49,32 @@ public class Enemy : MonoBehaviour
         else
         {
             direction = "V";
+            Debug.Log(direction);
         }
-        
+
+        Debug.Log(direction);
     }
 
     void Update()
     {
+
+        //Debug.Log("Enemy_x: " + transform.position.x + " Min_x: " + min.x); 
+
+        // If the player is running
+        if (instance.is_running)
+        {
+            distance = 30f;
+        }
+        else
+        {
+            distance = 20f;
+        }
+
         // If the player is near enough.
-        if(Vector3.Distance(transform.position, player.transform.position) < 20)
+        if(Vector3.Distance(transform.position, player.transform.position) < distance)
         {
             // Follow the Player.
+            moveSpeed = 1;
             Follow_Player();
 
             // The enemy has reached the player.
@@ -55,15 +84,33 @@ public class Enemy : MonoBehaviour
             }
         }
         else
-        {   
+        {
             // Patrullar por el escenario, evitando obstaculos.
-            Patrullar(direction, min, max);
+            if (!followed_player)
+            {
+                Patrullar(direction, max, min);
+            }
+            
+            // If the enemy followed the player and is not in his position.
+            else if(followed_player && (transform.position.x != xx && transform.position.y != yy))
+            {
+                Debug.Log("I want to return to my position");
+                // Make the enemy move to its inicial position.
+                Vector3.MoveTowards(transform.position, new Vector2(xx, yy), 10f);
+
+                // If he is in his inicial position, start Patrolling.
+                if(transform.position.x == xx && transform.position.y == yy)
+                {
+                    followed_player = false;
+                }
+            }
         }
 
     }
 
     void Follow_Player()
     {
+        followed_player = true;
         if (target != null)
         {
             Vector3 dir = target.position - transform.position;
@@ -91,35 +138,73 @@ public class Enemy : MonoBehaviour
     // Patrullar por el mundo evitando obstaculos.
     void Patrullar(string direction, Vector3 max, Vector3 min)
     {
+        moveSpeed = 8;
         float step = moveSpeed * Time.deltaTime;
-        //Vector3.MoveTowards(transform.position, new Vector3(100f, 100f, 0f), 1f);
-       
-        if (direction == "H"){
-            if (transform.position.x > max.x)
-            {
-                //transform.position -= new Vector3(1f, 0f, 0f) * moveSpeed;
 
-                Vector3.MoveTowards(transform.position, min, step);
-            }
-            else if(transform.position.x < min.x)
+        if (direction == "H"){
+            // Change the direction to left.
+            if (transform.position.x >= max.x)
             {
-                //transform.position += new Vector3(1f, 0f, 0f) * moveSpeed;
-               Vector3.MoveTowards(transform.position, max, step);
+                rgb.AddForce(new Vector2(-1f, 0f) * moveSpeed, ForceMode2D.Force);
             }
-        }else if(direction == "V"){
-            if (transform.position.y > max.y)
-            {
-                //transform.position -= new Vector3(0f, 1f, 0f) * moveSpeed;
-                Vector3.MoveTowards(transform.position, min, step);
+            // Change the direction to right.
+            else if (transform.position.x <= min.x)
+            { 
+                rgb.AddForce(new Vector2(1f, 0f) * moveSpeed, ForceMode2D.Force);
             }
-            else if (transform.position.y < min.y)
+            // The player is in the middle.
+            else
             {
-                //transform.position += new Vector3(0f, 1f, 0f) * moveSpeed;
-                Vector3.MoveTowards(transform.position, max, step);
+                float dis_min = Vector3.Distance(transform.position, min);
+                float dis_max = Vector3.Distance(transform.position, max);
+
+                // Move right.
+                if(dis_min < dis_max)
+                {
+                    rgb.AddForce(new Vector2(1f, 0f) * moveSpeed, ForceMode2D.Force);
+                }
+                // Move left.
+                else
+                {
+                    rgb.AddForce(new Vector2(-1f, 0f) * moveSpeed, ForceMode2D.Force);
+                }
+            }
+        }
+        else if(direction == "V"){
+            Debug.Log("Vertical");
+
+            // Change the direction to down.
+            if (transform.position.y >= max.y)
+            {
+                Debug.Log("Move Up");
+                rgb.AddForce(new Vector2(0f, -1f) * moveSpeed, ForceMode2D.Force);
+            }
+            // Change the direction to up.
+            else if (transform.position.y <= min.y)
+            {
+                Debug.Log("Move down");
+                rgb.AddForce(new Vector2(0f, 1f) * moveSpeed, ForceMode2D.Force);
+            }
+            else
+            {
+                float dis_min = Vector3.Distance(transform.position, min);
+                float dis_max = Vector3.Distance(transform.position, max);
+
+                // Move up.
+                if (dis_min < dis_max)
+                {
+                    rgb.AddForce(new Vector2(0f, 1f) * moveSpeed, ForceMode2D.Force);
+                }
+                // Move down.
+                else
+                {
+                    rgb.AddForce(new Vector2(0f, -1f) * moveSpeed, ForceMode2D.Force);
+                }
             }
         }
 
     }
+
 
     void Death()
     {
