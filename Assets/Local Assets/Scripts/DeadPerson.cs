@@ -5,9 +5,11 @@ public class DeadPerson : MonoBehaviour {
 
 	public GameObject player;
 	public float speed = 1;
+	public Sprite deadSprite;
 
-	private bool activateMove = false;
-	private bool lol = false;
+	private bool firstActivity = false, completedFirstActivity = false;
+	private bool secondActivity = false, completedSecondActivity = false;
+	private bool thirdActivity = false, completedThirdActivity = false;
 
 	// Use this for initialization
 	void Start () {
@@ -16,17 +18,38 @@ public class DeadPerson : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (activateMove == true) {
-			MovePlayer();	
+
+		if (firstActivity == true && completedFirstActivity == false) {
+
+			MovePlayer ();
+
+		} else if (secondActivity == true && completedSecondActivity == false) {
+
+			Debug.Log ("Activity 2");
+			TurnDead ();
+		
+		} else if (thirdActivity == true && completedThirdActivity == false) {
+
+			Debug.Log ("Activiy 3");
+			Knife ();
+
 		}
 	}
 
 	void OnMouseDown () {
 
-		activateMove = true;
+		if (completedFirstActivity == false) {
+		
+			firstActivity = true;
+		
+		} else if (completedSecondActivity == false) {
 
-		if (player.transform.position == transform.position){
-			// PAss
+			secondActivity = true;		
+		
+		} else if (completedThirdActivity == false) {
+		
+			thirdActivity = true;
+
 		}
 
 	}
@@ -37,8 +60,20 @@ public class DeadPerson : MonoBehaviour {
 
 		if (player.transform.position != transform.position) {
 			player.transform.position = Vector3.MoveTowards (player.transform.position, transform.position, step);
-		} else
-			activateMove = false;
+		} else {
+			completedFirstActivity = true;
+		}
+	}
 
+	void TurnDead() {
+
+		SpriteRenderer sr = gameObject.GetComponent<SpriteRenderer> ();
+		sr.sprite = deadSprite;
+
+		completedSecondActivity = true;
+	}
+
+	void Knife() {
+		completedThirdActivity = true;
 	}
 }
