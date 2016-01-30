@@ -7,10 +7,9 @@ public class Enemy : MonoBehaviour
     public GameObject particle;
     private Player instance;
 
-    public float maxSpeed; // 10
-    public float acc; // 2
     public Transform target;
-    public int moveSpeed;
+    public int RunSpeed;
+    public int patrolSpeed;
     public int rotationSpeed;
     float distance = 0f;
 
@@ -19,7 +18,8 @@ public class Enemy : MonoBehaviour
     public Vector3 max;
     Rigidbody2D rgb;
     bool followed_player = false;
-
+    bool follow_player = false;
+     
     float xx;
     float yy;
 
@@ -32,8 +32,8 @@ public class Enemy : MonoBehaviour
     void Awake()
     {
         rgb = GetComponent<Rigidbody2D>();
-		target = player.transform;//GameObject.Find("Player").transform;
-        instance = player.GetComponent<Player>();
+        target = GameObject.Find("Nigga").transform;
+       // instance = player.GetComponent<Player>();
     }
 
     void Start()
@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
         if(min.y == max.y)
         {
             direction = "H";
+            transform.Rotate(0f, 0f, 90f);
         }
         else
         {
@@ -52,65 +53,65 @@ public class Enemy : MonoBehaviour
             Debug.Log(direction);
         }
 
-        Debug.Log(direction);
     }
 
+ 
     void Update()
     {
+        // If the enemy is not following the player or is not returning from where he was.
+        Debug.Log(followed_player);
+        Debug.Log(follow_player);
 
-        //Debug.Log("Enemy_x: " + transform.position.x + " Min_x: " + min.x); 
 
-        // If the player is running
-        if (instance.is_running)
+        if (!follow_player && !followed_player)
         {
-            distance = 30f;
+            Patrullar(direction, max, min);
         }
-        else
+        else if (followed_player)
         {
-            distance = 20f;
-        }
+            Debug.Log(followed_player);
 
-        // If the player is near enough.
-        if(Vector3.Distance(transform.position, player.transform.position) < distance)
-        {
-            // Follow the Player.
-            moveSpeed = 1;
-            Follow_Player();
+            // Regresar a donde estaba.
+            Vector2 pos = new Vector2(xx, yy);
+            //Vector3.MoveTowards(transform.position, pos, 10f);
 
-            // The enemy has reached the player.
-            if(Vector3.Distance(transform.position, player.transform.position) < 1)
+            transform.position = pos;
+
+            // If the player returned where he was.
+            if (Vector2.Distance(transform.position, pos) < 1)
             {
                 Death();
+                followed_player = false;
             }
         }
-        else
-        {
-            // Patrullar por el escenario, evitando obstaculos.
-            if (!followed_player)
-            {
-                Patrullar(direction, max, min);
-            }
-            
-            // If the enemy followed the player and is not in his position.
-            else if(followed_player && (transform.position.x != xx && transform.position.y != yy))
-            {
-                Debug.Log("I want to return to my position");
-                // Make the enemy move to its inicial position.
-                Vector3.MoveTowards(transform.position, new Vector2(xx, yy), 10f);
-
-                // If he is in his inicial position, start Patrolling.
-                if(transform.position.x == xx && transform.position.y == yy)
-                {
-                    followed_player = false;
-                }
-            }
-        }
-
     }
+
+    // The player is in the range of the enemy.
+    void OnTriggerStay2D(Collider2D stone)
+    {
+
+        Follow_Player();
+    }
+
+    // The player escaped from the enemy.
+    void OnTriggerExit2D(Collider2D stone)
+    {
+
+        follow_player = false;
+        followed_player = true;
+    }
+
+    // Kill the player!
+    void OnCollisionEnter2D(Collision2D stone)
+    {
+        Death();
+    }   
+    
+
 
     void Follow_Player()
     {
-        followed_player = true;
+        follow_player = true;
         if (target != null)
         {
             Vector3 dir = target.position - transform.position;
@@ -122,11 +123,7 @@ public class Enemy : MonoBehaviour
                     rotationSpeed * Time.deltaTime);
 
             //Move Towards Target
-            Vector3 Suma = ((target.position - transform.position).normalized * moveSpeed * Time.deltaTime) * acc;
-            if(acc < 5)
-            {
-                acc += 0.5f;
-            }
+            Vector3 Suma = ((target.position - transform.position).normalized * RunSpeed * Time.deltaTime);
             transform.position += Suma;
 
          
@@ -138,19 +135,17 @@ public class Enemy : MonoBehaviour
     // Patrullar por el mundo evitando obstaculos.
     void Patrullar(string direction, Vector3 max, Vector3 min)
     {
-        moveSpeed = 8;
-        float step = moveSpeed * Time.deltaTime;
 
         if (direction == "H"){
             // Change the direction to left.
             if (transform.position.x >= max.x)
             {
-                rgb.AddForce(new Vector2(-1f, 0f) * moveSpeed, ForceMode2D.Force);
+                rgb.AddForce(new Vector2(-1f, 0f) * patrolSpeed, ForceMode2D.Force);
             }
             // Change the direction to right.
             else if (transform.position.x <= min.x)
-            { 
-                rgb.AddForce(new Vector2(1f, 0f) * moveSpeed, ForceMode2D.Force);
+            {
+                rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
             }
             // The player is in the middle.
             else
@@ -161,29 +156,26 @@ public class Enemy : MonoBehaviour
                 // Move right.
                 if(dis_min < dis_max)
                 {
-                    rgb.AddForce(new Vector2(1f, 0f) * moveSpeed, ForceMode2D.Force);
+                    rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
                 }
                 // Move left.
                 else
                 {
-                    rgb.AddForce(new Vector2(-1f, 0f) * moveSpeed, ForceMode2D.Force);
+                    rgb.AddForce(new Vector2(-1f, 0f) * patrolSpeed, ForceMode2D.Force);
                 }
             }
         }
         else if(direction == "V"){
-            Debug.Log("Vertical");
 
             // Change the direction to down.
             if (transform.position.y >= max.y)
             {
-                Debug.Log("Move Up");
-                rgb.AddForce(new Vector2(0f, -1f) * moveSpeed, ForceMode2D.Force);
+                rgb.AddForce(new Vector2(0f, -1f) * patrolSpeed, ForceMode2D.Force);
             }
             // Change the direction to up.
             else if (transform.position.y <= min.y)
             {
-                Debug.Log("Move down");
-                rgb.AddForce(new Vector2(0f, 1f) * moveSpeed, ForceMode2D.Force);
+                rgb.AddForce(new Vector2(0f, 1f) * patrolSpeed, ForceMode2D.Force);
             }
             else
             {
@@ -193,12 +185,12 @@ public class Enemy : MonoBehaviour
                 // Move up.
                 if (dis_min < dis_max)
                 {
-                    rgb.AddForce(new Vector2(0f, 1f) * moveSpeed, ForceMode2D.Force);
+                    rgb.AddForce(new Vector2(0f, 1f) * patrolSpeed, ForceMode2D.Force);
                 }
                 // Move down.
                 else
                 {
-                    rgb.AddForce(new Vector2(0f, -1f) * moveSpeed, ForceMode2D.Force);
+                    rgb.AddForce(new Vector2(0f, -1f) * patrolSpeed, ForceMode2D.Force);
                 }
             }
         }
@@ -218,5 +210,3 @@ public class Enemy : MonoBehaviour
 
     }
 }
-
-    
