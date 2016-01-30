@@ -3,157 +3,64 @@ using System.Collections;
 
 public class Enemy : MonoBehaviour
 {
+    public GameObject player;
+    public float maxSpeed; // 10
+    public float acc; // 2
+    public Transform target;
+    public int moveSpeed;
+    public int rotationSpeed;
 
-    // Local variables.
-    public float patrolSpeed = 5f;
-    public float followSpeed = 1f;
-    bool found_player = false;
-    string direction = "";
-    Vector3 distance;
-
-    // Patrol coordinates.
-    //public Vector3 max;
-    //public Vector3 min;
-
-    public GameObject Player;
-    Player script;
-
-    private NavMeshAgent nav;   // Reference to the nav mesh component.
-    Animator anim;
-
-    Rigidbody2D rgb;
-
-    // Construct.
-    /*public Enemy(Vector3 max, Vector3 min, string direction)
-    {
-        this.max = max;
-        this.min = min;
-    }*/
-
-
-    // Inizialitze components.
-    void Awake()
-    {
-        rgb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-        nav = GetComponent<NavMeshAgent>();
-        script = Player.GetComponent<Player>();
-    }
-
-    // Use this for initialization
     void Start()
     {
-
-        // Define the direction of the enemy.
-        /*if (max.y == min.y)
-        {
-            direction = "Horizontal";
-        }
-        else
-        {
-            direction = "Vertical";
-        }*/
+        target = GameObject.Find("Player").transform;
     }
 
-    // Update is called once per frame
     void Update()
     {
- 
-        // If the enemy found the player.
-        float distance = Vector3.Distance(transform.position, Player.transform.position);
-        //Debug.LogError("distance: " + distance);
-
-
-        if (distance < 5)
+        // If the player is near enough.
+        if(Vector3.Distance(transform.position, player.transform.position) < 5)
         {
-            Follow_Player(distance, Player.transform.position.x, Player.transform.position.y);
+            // Follow the Player.
+            Follow_Player();
         }
         else
-        {
-            // The enemy hasn't found the player.
-            Patrol();
+        {   
+            // Patrullar por el escenario, evitando obstaculos.
+            Patrullar();
         }
-
-        // Kill the player.
-        if (distance < 1)
-        {
-            // Kill animation!
-            script.Death();
-
-            // Create blood particles!
-            for (int i = 0; i < Random.Range(5, 7); i++)
-            {
-                //Instantiate(Blood, new Vector3(transform.x, transform.y, 0f), 0f);
-            }
-        }
-
 
     }
 
-
-    // Patrol around the world looking for the player.
-    void Patrol()
+    void Follow_Player()
     {
-        /*float step = patrolSpeed * Time.deltaTime;
-        // If the direction is vertical.
-        if (direction == "Vertical")
+        if (target != null)
         {
-            if (transform.position.y <= min.y)
+            Vector3 dir = target.position - transform.position;
+            // Only needed if objects don't share 'z' value.
+            dir.z = 0.0f;
+            if (dir != Vector3.zero)
+                transform.rotation = Quaternion.Slerp(transform.rotation,
+                    Quaternion.FromToRotation(Vector3.right, dir),
+                    rotationSpeed * Time.deltaTime);
+
+            //Move Towards Target
+            Vector3 Suma = ((target.position - transform.position).normalized * moveSpeed * Time.deltaTime) * acc;
+            if(acc < 5)
             {
-                Vector3.MoveTowards(transform.position, max, step);
+                acc += 0.5f;
             }
-            else if (transform.position.x >= max.y)
-            {
-                Vector3.MoveTowards(transform.position, min, step);
-            }
+            transform.position += Suma;
+
+         
+
         }
-        // If the direction is horizontal.
-        else if (direction == "Horizontal")
-        {
-            if (transform.position.x <= min.x)
-            {
-                Vector3.MoveTowards(transform.position, max, step);
-            }
-            else if (transform.position.x >= max.x)
-            {
-                Vector3.MoveTowards(transform.position, min, step);
-            }
-        }
-        */
+        GetComponent<Rigidbody2D>().velocity = Vector3.zero;
     }
 
-    void Follow_Player(float distance, float destination_x, float destination_y)
+    void Patrullar()
     {
-        float angulo = Mathf.Pow(Mathf.Sin(destination_y) * Mathf.Rad2Deg, -1);
-        float x_component = Mathf.Cos(angulo) * distance;
-        float y_component = Mathf.Sin(angulo) * distance;
-        rgb.velocity = new Vector2(x_component * followSpeed, y_component * followSpeed);
 
-
-        //rgb.AddForce(move * Time.deltaTime, ForceMode2D.Impulse);
-
-
-
-        //Vector2.MoveTowards(transform.position, Player.transform.position, followSpeed);
-
-        /* Calculate if path is posible.
-        bool path = nav.CalculatePath(Player.transform.position, 1);
-
-        // If path is possible follow the player.
-        if (path)
-        {
-            // Accelerate the Enemy.
-            nav.acceleration = 5;
-
-            // Set the enemy's destination.
-            nav.destination = new Vector3(destination_x, destination_y);
-
-            // Set found_player to true.
-            found_player = true;
-        }
-        */
     }
-    
 }
 
     
