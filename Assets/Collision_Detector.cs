@@ -11,11 +11,11 @@ public class Collision_Detector : MonoBehaviour {
         // If the gears are in position.
         if (Complete(gears))
         {
-            // Destroy the door.WW
+            // Destroy the door.
             Destroy(door);
         }
 
-        Debug.Log(gears[0].transform.rotation.eulerAngles.y);
+ 
     }
    
     void OnTriggerEnter2D(Collider2D col)
@@ -26,32 +26,23 @@ public class Collision_Detector : MonoBehaviour {
         }
     }
 
-   /* bool Complete(GameObject[] gears)
+    bool Complete(GameObject[] gears)
     {
+        
+       
+
         // If the puzzle is completed, return true.
-        if (gears[0].transform.rotation.eulerAngles.y == 90 &&
-            gears[1].transform.rotation.eulerAngles.y == 180 &&
-            gears[2].transform.rotation.eulerAngles.y == 0 &&
-            gears[3].transform.rotation.eulerAngles.y == 270)
+        if (gears[0].transform.rotation.eulerAngles.z == 90 &&
+            gears[1].transform.rotation.eulerAngles.z == 180 &&
+            gears[2].transform.rotation.eulerAngles.z == 0 &&
+            gears[3].transform.rotation.eulerAngles.z == 270)
         {
-            Debug.Log("TRUE!");
+
             return true;
         }
         return false;
     }
-*/
-    bool Complete(GameObject[] gears)
-    {
-        /*if(gears[0].transform.rotation.eulerAngles.y == 90)
-        {
-            Debug.Log("True, first(90)");
-            if(gears[1].transform.rotation.eulerAngles.y == 180)
-            {
-                Debug.Log("True, first(180)");
-                return true;
-            }
-        }*/
-        return false;
-    }
+
+
 
 }

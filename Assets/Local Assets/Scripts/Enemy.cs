@@ -50,18 +50,14 @@ public class Enemy : MonoBehaviour
         else
         {
             direction = "V";
-            Debug.Log(direction);
         }
-
+		Debug.Log(direction);
     }
 
  
     void Update()
     {
         // If the enemy is not following the player or is not returning from where he was.
-        Debug.Log(followed_player);
-        Debug.Log(follow_player);
-
 
         if (!follow_player && !followed_player)
         {
@@ -69,8 +65,6 @@ public class Enemy : MonoBehaviour
         }
         else if (followed_player)
         {
-            Debug.Log(followed_player);
-
             // Regresar a donde estaba.
             Vector2 pos = new Vector2(xx, yy);
             //Vector3.MoveTowards(transform.position, pos, 10f);
@@ -89,22 +83,28 @@ public class Enemy : MonoBehaviour
     // The player is in the range of the enemy.
     void OnTriggerStay2D(Collider2D stone)
     {
-
-        Follow_Player();
+		if(stone.gameObject.CompareTag("Player"))
+		{
+			Follow_Player();
+		}
     }
 
     // The player escaped from the enemy.
     void OnTriggerExit2D(Collider2D stone)
     {
-
-        follow_player = false;
-        followed_player = true;
+		if (stone.gameObject.CompareTag ("Player")) {
+			follow_player = false;
+			followed_player = true;
+		}
     }
 
     // Kill the player!
     void OnCollisionEnter2D(Collision2D stone)
     {
-        Death();
+		if(stone.gameObject.CompareTag("Player"))
+		{
+			Death();
+		}
     }   
     
 
