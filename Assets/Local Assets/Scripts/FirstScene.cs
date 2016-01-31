@@ -38,7 +38,7 @@ public class FirstScene : MonoBehaviour {
 		GameObject background = GameObject.Find ("background-test");
 		background.transform.position = new Vector3 (-0.02f, 0.07f, 0f);
 
-		GameObject nigga = GameObject.Find ("Nigga");
+		GameObject nigga = GameObject.Find ("NiggaAtado");
 		nigga.transform.position = new Vector3 (-1.6f, 0f, 0f);
 
 		GameObject deadPeople = GameObject.Find ("deadPeople");
