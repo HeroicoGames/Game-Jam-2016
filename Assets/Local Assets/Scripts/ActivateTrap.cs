@@ -4,10 +4,9 @@ using System.Collections;
 public class ActivateTrap : MonoBehaviour {
 
 	public GameObject trap;
-	private SpriteRenderer trapSprite;
 	// Use this for initialization
 	void Start () {
-		trapSprite = trap.gameObject.GetComponent<SpriteRenderer> ();
+		
 	}
 	
 	// Update is called once per frame
@@ -19,7 +18,7 @@ public class ActivateTrap : MonoBehaviour {
 	{
 		if(col.gameObject.CompareTag("Player"))
 		{
-			trapSprite.enabled = true;
+			trap.SetActive (true);
 		}
 	}
 }
