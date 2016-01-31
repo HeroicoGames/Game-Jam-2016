@@ -7,11 +7,14 @@ public class Enemy : MonoBehaviour
     public GameObject particle;
     private Player instance;
 
+
     public Transform target;
     public int RunSpeed;
     public int patrolSpeed;
     public int rotationSpeed;
     float distance = 0f;
+
+    private AudioSource RunPlayer;
 
     string direction = "";
     public Vector3 min;
@@ -31,6 +34,7 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
+        RunPlayer = GetComponent<AudioSource>();
         rgb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Nigga").transform;
         instance = player.GetComponent<Player>();
@@ -112,6 +116,7 @@ public class Enemy : MonoBehaviour
 
     void Follow_Player()
     {
+        //RunPlayer.playOnAwake();
         follow_player = true;
         if (target != null)
         {
