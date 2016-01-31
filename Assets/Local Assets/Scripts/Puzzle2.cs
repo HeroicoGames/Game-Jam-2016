@@ -5,7 +5,7 @@ public class Puzzle2 : MonoBehaviour {
 
     public GameObject door;
     public GameObject[] gears;
-    bool puzzle = false;
+    //bool puzzle = false;
 
     public int numberKey = 0;
 

@@ -12,9 +12,12 @@ public class Enemy : MonoBehaviour
     public int RunSpeed;
     public int patrolSpeed;
     public int rotationSpeed;
-    float distance = 0f;
+    //float distance = 0f;
 
-    private AudioSource RunPlayer;
+	public GameObject audioRun;
+	public GameObject audioAmbient;
+	//private AudioSource RunPlayer;
+	//private AudioSource Ambient;
 
     string direction = "";
     public Vector3 min;
@@ -34,7 +37,8 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
-        RunPlayer = GetComponent<AudioSource>();
+		//RunPlayer = audioRun.GetComponent<AudioSource> ();
+		//Ambient = audioAmbient.GetComponent<AudioSource> ();
         rgb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Nigga").transform;
         instance = player.GetComponent<Player>();
@@ -55,7 +59,6 @@ public class Enemy : MonoBehaviour
         {
             direction = "V";
         }
-		Debug.Log(direction);
     }
 
  
@@ -65,6 +68,8 @@ public class Enemy : MonoBehaviour
 
         if (!follow_player && !followed_player)
         {
+			//RunPlayer.Pause ();
+			//Ambient.UnPause ();
             Patrullar(direction, max, min);
         }
         else if (followed_player)
@@ -116,7 +121,8 @@ public class Enemy : MonoBehaviour
 
     void Follow_Player()
     {
-        //RunPlayer.playOnAwake();
+		//Ambient.Pause ();
+		//RunPlayer.Play();
         follow_player = true;
         if (target != null)
         {
@@ -211,8 +217,6 @@ public class Enemy : MonoBehaviour
         {
             Instantiate(particle, new Vector3(transform.position.x - 5, transform.position.y - 5, -7f), Quaternion.identity);
         }
-
-        // Cambiar la escena.
 
     }
 }
