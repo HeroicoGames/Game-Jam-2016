@@ -10,7 +10,6 @@ public class Puzzle1 : MonoBehaviour {
 	void Start () {
 
 	}
-	
 	// Update is called once per frame
 	void Update () {
 		if (count_collisions == 2) {
