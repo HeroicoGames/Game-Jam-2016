@@ -16,7 +16,7 @@ public class MainMenuCanvasManager : MonoBehaviour {
 
 	public void StartGame()
 	{
-		SceneManager.LoadScene ("MainScene");
+		SceneManager.LoadScene ("First");
 	}
 
 	public void Credits()
