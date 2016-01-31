@@ -179,14 +179,14 @@ public class Enemy : MonoBehaviour
                 // Move right.
                 if(dis_min < dis_max)
                 {
-                    transform.localScale = new Vector3(1, 1, 1);
+                   // transform.localScale = new Vector3(1, 1, 1);
                     rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
 
                 }
                 // Move left.
                 else
                 {
-                    transform.localScale = new Vector3(-1, 1, 1);
+                  //  transform.localScale = new Vector3(-1, 1, 1);
                     rgb.AddForce(new Vector2(-1f, 0f) * patrolSpeed, ForceMode2D.Force);
                 }
             }
