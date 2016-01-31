@@ -76,7 +76,7 @@ public class DeadPerson : MonoBehaviour {
 
 	void Knife() {
 
-		Instantiate (knifePrefab, Vector3.zero, Quaternion.identity);
+		Instantiate (knifePrefab,  new Vector3(0f, 1f, 0f), Quaternion.identity);
 
 		completedThirdActivity = true;
 	}
