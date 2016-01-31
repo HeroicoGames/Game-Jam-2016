@@ -17,6 +17,7 @@ public class Enemy : MonoBehaviour
 	public GameObject audioRun;
 	public GameObject audioAmbient;
 	private Animator anim;
+    //private Sprite spr;
 	//private AudioSource RunPlayer;
 	//private AudioSource Ambient;
 
@@ -40,6 +41,7 @@ public class Enemy : MonoBehaviour
     {
         //RunPlayer = audioRun.GetComponent<AudioSource> ();
         //Ambient = audioAmbient.GetComponent<AudioSource> ();
+        //spr = GetComponent<Sprite>();
         anim = GetComponent<Animator>();
         rgb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Nigga").transform;
@@ -55,13 +57,13 @@ public class Enemy : MonoBehaviour
         if(min.y == max.y)
         {
             direction = "H";
-            anim.SetInteger("direction", 1);
+            anim.SetInteger("direction", 0);
         }
         else
         {
             direction = "V";
             //transform.Rotate(0f, 0f, 90f);
-            anim.SetInteger("direction", 0);
+            anim.SetInteger("direction",    1   );
         }
     }
 
@@ -154,6 +156,7 @@ public class Enemy : MonoBehaviour
             // Change the direction to left.
             if (transform.position.x >= max.x)
             {
+                transform.localScale = new Vector3(-1, 1, 1);
                 rgb.AddForce(new Vector2(-1f, 0f) * patrolSpeed, ForceMode2D.Force);
                 anim.SetBool("left", true);
                 anim.SetBool("right", false);
@@ -162,6 +165,7 @@ public class Enemy : MonoBehaviour
             // Change the direction to right.
             else if (transform.position.x <= min.x)
             {
+                transform.localScale = new Vector3(1, 1, 1);
                 rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
                 anim.SetBool("right", true);
                 anim.SetBool("left", false);
@@ -175,12 +179,14 @@ public class Enemy : MonoBehaviour
                 // Move right.
                 if(dis_min < dis_max)
                 {
+                    transform.localScale = new Vector3(1, 1, 1);
                     rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
 
                 }
                 // Move left.
                 else
                 {
+                    transform.localScale = new Vector3(-1, 1, 1);
                     rgb.AddForce(new Vector2(-1f, 0f) * patrolSpeed, ForceMode2D.Force);
                 }
             }
