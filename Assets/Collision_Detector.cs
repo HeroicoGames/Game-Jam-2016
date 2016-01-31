@@ -14,13 +14,10 @@ public class Collision_Detector : MonoBehaviour {
             // Destroy the door.
             Destroy(door);
         }
-
- 
     }
    
     void OnTriggerEnter2D(Collider2D col)
     {
-
         if (col.gameObject.tag == "Key") {
             col.gameObject.transform.Rotate(0f, 0f, 90f);
         }
@@ -28,16 +25,12 @@ public class Collision_Detector : MonoBehaviour {
 
     bool Complete(GameObject[] gears)
     {
-        
-       
-
         // If the puzzle is completed, return true.
         if (gears[0].transform.rotation.eulerAngles.z == 90 &&
             gears[1].transform.rotation.eulerAngles.z == 180 &&
             gears[2].transform.rotation.eulerAngles.z == 0 &&
             gears[3].transform.rotation.eulerAngles.z == 270)
         {
-
             return true;
         }
         return false;
