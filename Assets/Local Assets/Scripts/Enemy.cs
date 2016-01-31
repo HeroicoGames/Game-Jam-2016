@@ -37,7 +37,7 @@ public class Enemy : MonoBehaviour
         RunPlayer = GetComponent<AudioSource>();
         rgb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Nigga").transform;
-       // instance = player.GetComponent<Player>();
+        instance = player.GetComponent<Player>();
     }
 
     void Start()
@@ -108,6 +108,7 @@ public class Enemy : MonoBehaviour
 		if(stone.gameObject.CompareTag("Player"))
 		{
 			Death();
+			instance.PlayerDeath ();
 		}
     }   
     
