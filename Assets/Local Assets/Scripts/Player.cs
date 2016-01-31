@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 	public float runSpeed = 0f;
 	private float movex = 0f;
 	private float movey = 0f;
-	public	int countDivineObjects = 0;
+	private	int countDivineObjects = 0;
 	public bool is_running = false;
 	public GameObject door;
 	Rigidbody2D rgb;

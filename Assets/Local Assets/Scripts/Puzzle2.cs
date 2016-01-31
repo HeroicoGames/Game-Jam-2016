@@ -5,7 +5,7 @@ public class Puzzle2 : MonoBehaviour {
 
     public GameObject door;
     public GameObject[] gears;
-    //bool puzzle = false;
+	public AudioSource unlockDoor;
 
     public int numberKey = 0;
 
@@ -20,6 +20,7 @@ public class Puzzle2 : MonoBehaviour {
         // If the player completed the puzzle.
         if (Complete(gears))
         {
+			unlockDoor.Play ();
             Destroy(door);
         }
 

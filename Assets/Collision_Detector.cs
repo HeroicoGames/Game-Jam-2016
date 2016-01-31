@@ -5,13 +5,14 @@ public class Collision_Detector : MonoBehaviour {
 
     public GameObject[] gears;
     public GameObject door;
+	public AudioSource unlockDoor;
 
     void Update()
     {
         // If the gears are in position.
         if (Complete(gears))
         {
-            // Destroy the door.
+			unlockDoor.Play ();
             Destroy(door);
         }
     }
