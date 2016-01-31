@@ -19,7 +19,13 @@ public class MainMenuCanvasManager : MonoBehaviour {
 		SceneManager.LoadScene ("First");
 	}
 
-	public void Credits()
+    public void MainScene()
+    {
+        SceneManager.LoadScene("MainScene");
+    }
+
+
+    public void Credits()
 	{
 		SceneManager.LoadScene ("Credits");
 	}
@@ -33,4 +39,6 @@ public class MainMenuCanvasManager : MonoBehaviour {
 	{
 		SceneManager.LoadScene ("MainMenu");
 	}
+
+ 
 }

@@ -45,6 +45,6 @@ public class FirstScene : MonoBehaviour {
 		deadPeople.transform.position = new Vector3 (0f, -1f, 0f); // 1.2
 
 		GameObject door = GameObject.Find ("door");
-		deadPeople.transform.position = new Vector3 (0f, 0f, 0f); // 4.6
+		door.transform.position = new Vector3 (-3f, 0f, 0f); // 4.6
 	}
 }

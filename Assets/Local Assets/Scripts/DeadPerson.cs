@@ -4,10 +4,12 @@ using System.Collections;
 public class DeadPerson : MonoBehaviour {
 
 	public GameObject player;
+    public GameObject playerplayer;
 	public GameObject knifePrefab;
 	public float speed = 1;
 	public Sprite deadSprite;
 
+   
 	private bool firstActivity = false, completedFirstActivity = false;
 	private bool secondActivity = false, completedSecondActivity = false;
 	private bool thirdActivity = false, completedThirdActivity = false;
@@ -75,8 +77,15 @@ public class DeadPerson : MonoBehaviour {
 	}
 
 	void Knife() {
+       // float xx = 0, yy = 0;
+        //xx = player.transform.position.x;
+        //yy = player.transform.position.y;
+
+        Destroy(player);
+        Instantiate(playerplayer, new Vector2(0f, 0f), Quaternion.identity);
 
 		Instantiate (knifePrefab,  new Vector3(0f, 1f, 0f), Quaternion.identity);
+        //Invoke("Destroy(knifePrefab)", 30f);
 
 		completedThirdActivity = true;
 	}
