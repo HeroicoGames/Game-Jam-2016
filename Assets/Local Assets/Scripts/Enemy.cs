@@ -16,6 +16,7 @@ public class Enemy : MonoBehaviour
 
 	public GameObject audioRun;
 	public GameObject audioAmbient;
+    public Animator anim;
 	//private AudioSource RunPlayer;
 	//private AudioSource Ambient;
 
@@ -37,8 +38,9 @@ public class Enemy : MonoBehaviour
 
     void Awake()
     {
-		//RunPlayer = audioRun.GetComponent<AudioSource> ();
-		//Ambient = audioAmbient.GetComponent<AudioSource> ();
+        //RunPlayer = audioRun.GetComponent<AudioSource> ();
+        //Ambient = audioAmbient.GetComponent<AudioSource> ();
+        anim = GetComponent<Animator>();
         rgb = GetComponent<Rigidbody2D>();
         target = GameObject.Find("Nigga").transform;
         instance = player.GetComponent<Player>();
@@ -48,16 +50,18 @@ public class Enemy : MonoBehaviour
     {
         xx = transform.position.x;
         yy = transform.position.y;
-
+        
         // Set the direction.
         if(min.y == max.y)
         {
             direction = "H";
-            transform.Rotate(0f, 0f, 90f);
+            anim.SetInteger("direction", 1);
         }
         else
         {
             direction = "V";
+            //transform.Rotate(0f, 0f, 90f);
+            anim.SetInteger("direction", 0);
         }
     }
 
@@ -121,8 +125,6 @@ public class Enemy : MonoBehaviour
 
     void Follow_Player()
     {
-		//Ambient.Pause ();
-		//RunPlayer.Play();
         follow_player = true;
         if (target != null)
         {
@@ -153,11 +155,16 @@ public class Enemy : MonoBehaviour
             if (transform.position.x >= max.x)
             {
                 rgb.AddForce(new Vector2(-1f, 0f) * patrolSpeed, ForceMode2D.Force);
+                anim.SetBool("left", true);
+                anim.SetBool("right", false);
+
             }
             // Change the direction to right.
             else if (transform.position.x <= min.x)
             {
                 rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
+                anim.SetBool("right", true);
+                anim.SetBool("left", false);
             }
             // The player is in the middle.
             else
@@ -169,6 +176,7 @@ public class Enemy : MonoBehaviour
                 if(dis_min < dis_max)
                 {
                     rgb.AddForce(new Vector2(1f, 0f) * patrolSpeed, ForceMode2D.Force);
+
                 }
                 // Move left.
                 else
@@ -183,11 +191,15 @@ public class Enemy : MonoBehaviour
             if (transform.position.y >= max.y)
             {
                 rgb.AddForce(new Vector2(0f, -1f) * patrolSpeed, ForceMode2D.Force);
+                anim.SetBool("up", true);
+                anim.SetBool("down", false);
             }
             // Change the direction to up.
             else if (transform.position.y <= min.y)
             {
                 rgb.AddForce(new Vector2(0f, 1f) * patrolSpeed, ForceMode2D.Force);
+                anim.SetBool("down", true);
+                anim.SetBool("up", false);
             }
             else
             {
