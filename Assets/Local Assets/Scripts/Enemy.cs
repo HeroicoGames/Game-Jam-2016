@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
 	public GameObject audioRun;
 	public GameObject audioAmbient;
-    public Animator anim;
+	private Animator anim;
 	//private AudioSource RunPlayer;
 	//private AudioSource Ambient;
 
