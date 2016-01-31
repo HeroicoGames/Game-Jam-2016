@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
 	public float runSpeed = 0f;
 	private float movex = 0f;
 	private float movey = 0f;
-	private	int countDivineObjects = 0;
+	public	int countDivineObjects = 0;
 	public bool is_running = false;
 	public GameObject door;
 	Rigidbody2D rgb;
@@ -105,7 +105,7 @@ public class Player : MonoBehaviour
 		}
 
 		if (col.gameObject.CompareTag ("ExitDoor") && isOpen) {
-			SceneManager.LoadScene ("Credits");
+			SceneManager.LoadScene ("FinalScene");
 		}
 	}
 }
